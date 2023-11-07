@@ -3,6 +3,8 @@ import argparse
 import sys
 from CalcRating import CalcRating
 from TextDataReader import TextDataReader
+from JSONDataReader import JSONDataReader
+from QuartileGetter import QuartileGetter
 
 
 def get_path_from_arguments(args) -> str:
@@ -23,6 +25,18 @@ def main():
     print("Students: ", students)
     rating = CalcRating(students).calc()
     print("Rating: ", rating)
+    students_list = []
+    for student in rating:
+        students_list.append((student, rating[student]))
+
+    def takeSecond(elem):
+        return elem[1]
+
+    students_list.sort(key=takeSecond)
+    quartilegetter = QuartileGetter()
+    high_quartile = quartilegetter.getHighQuartile(students_list)
+    print('High quartile:')
+    print("Rating: ", high_quartile)
 
 
 if __name__ == "__main__":
