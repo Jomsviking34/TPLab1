@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from math import ceil,floor
+from math import ceil, floor
 
 
 class QuartileGetter:
