@@ -24,7 +24,9 @@ def main():
     students = reader.read(path)
     print("Students: ", students)
     rating = CalcRating(students).calc()
+    print('\n')
     print("Rating: ", rating)
+    print('\n')
     students_list = []
     for student in rating:
         students_list.append((student, rating[student]))
@@ -35,8 +37,7 @@ def main():
     students_list.sort(key=takeSecond)
     quartilegetter = QuartileGetter()
     high_quartile = quartilegetter.getHighQuartile(students_list)
-    print('High quartile:')
-    print("Rating: ", high_quartile)
+    print('High quartile: ', high_quartile)
 
 
 if __name__ == "__main__":
