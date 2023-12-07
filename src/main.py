@@ -1,7 +1,7 @@
-# -*- coding: utf-8 -*-
 import argparse
 import sys
 from CalcRating import CalcRating
+from DataReader import DataReader
 from TextDataReader import TextDataReader
 from JSONDataReader import JSONDataReader
 from QuartileGetter import QuartileGetter
@@ -15,29 +15,33 @@ def get_path_from_arguments(args) -> str:
     return args.path
 
 
-def main():
-    path = get_path_from_arguments(sys.argv[1:])
+def select_reader(path) -> DataReader:
     if path.endswith('.txt'):
         reader = TextDataReader()
-    if path.endswith('.json'):
+    elif path.endswith('.json'):
         reader = JSONDataReader()
-    students = reader.read(path)
-    print("Students: ", students)
-    rating = CalcRating(students).calc()
-    print('\n')
-    print("Rating: ", rating)
-    print('\n')
-    students_list = []
-    for student in rating:
-        students_list.append((student, rating[student]))
+    else:
+        reader = None
+    return reader
 
-    def takeSecond(elem):
-        return elem[1]
 
-    students_list.sort(key=takeSecond)
-    quartilegetter = QuartileGetter()
-    high_quartile = quartilegetter.getHighQuartile(students_list)
-    print('High quartile: ', high_quartile)
+def main():
+    path = get_path_from_arguments(sys.argv[1:])
+    reader = select_reader(path)
+    if isinstance(reader, DataReader):
+        students = reader.read(path)
+        print("Students: ", students)
+        rating = CalcRating(students).calc()
+        print("\nRating: ", rating)
+        students_list = []
+        for student in rating:
+            students_list.append((student, rating[student]))
+        quartilegetter = QuartileGetter()
+        high_quartile = quartilegetter.getHighQuartile(students_list,
+                                                       False, lambda x: x[1])
+        print('\nHigh quartile: ', high_quartile)
+    else:
+        print('Wrong file extension')
 
 
 if __name__ == "__main__":
